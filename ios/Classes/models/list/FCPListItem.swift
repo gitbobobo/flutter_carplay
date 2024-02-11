@@ -48,6 +48,10 @@ class FCPListItem {
         complete()
       }
     }
+    var imageSize: CGSize = CGSize(width: 50, height: 50)
+    if detailText != nil {
+      imageSize = CGSize(width: 100, height: 100)
+    }
     if image != nil {
         if image!.starts(with: "http"){
             
@@ -57,14 +61,22 @@ class FCPListItem {
             DispatchQueue.global(qos: .background).async {
                 let url = URL(string: self.image!)
                 let stationImage = try? UIImage(withURL: url!)
+
+                stationImage?.resizeImageTo(size: imageSize)
     //
                     DispatchQueue.main.async {
                         listItem.setImage(stationImage)
 
                     }
                   }
+        } else if image!.starts(with: "sf_") {
+          let systemImage = UIImage(systemName: image!.replacingOccurrences(of: "sf_", with: ""))
+            systemImage?.resizeImageTo(size: imageSize)
+            listItem.setImage(systemImage)
         }else{
-            listItem.setImage(UIImage().fromFlutterAsset(name: image!))
+            let assetImage = UIImage().fromFlutterAsset(name: image!)
+            assetImage.resizeImageTo(size: imageSize)
+            listItem.setImage(assetImage)
         }
     }
     if playbackProgress != nil {
@@ -96,9 +108,11 @@ class FCPListItem {
       self._super?.setText(text!)
       self.text = text!
     }
+    var imageSize: CGSize = CGSize(width: 50, height: 50)
     if detailText != nil {
       self._super?.setDetailText(detailText)
       self.detailText = detailText
+      imageSize = CGSize(width: 100, height: 100)
     }
     if image != nil {
         // Added by bensalcie
@@ -108,6 +122,7 @@ class FCPListItem {
             DispatchQueue.global(qos: .background).async {
                 let url = URL(string: self.image!)
                 let stationImage = try? UIImage(withURL: url!)
+                stationImage?.resizeImageTo(size: imageSize)
     //
                     DispatchQueue.main.async {
                                     self._super?.setImage(stationImage)
@@ -116,8 +131,15 @@ class FCPListItem {
                     }
                   }
             
+        }else if image!.starts(with: "sf_") {
+          let systemImage = UIImage(systemName: image!.replacingOccurrences(of: "sf_", with: ""))
+            systemImage?.resizeImageTo(size: imageSize)
+            self._super?.setImage(systemImage)
+            self.image = image
         }else{
-            self._super?.setImage(UIImage().fromFlutterAsset(name: image!))
+           let assetImage = UIImage().fromFlutterAsset(name: image!)
+            assetImage.resizeImageTo(size: imageSize)
+            self._super?.setImage(assetImage)
             self.image = image
         }
     }

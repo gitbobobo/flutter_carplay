@@ -58,10 +58,11 @@ class FlutterCarPlayController {
                 for (var s in t.sections) {
                   for (var i in s.items) {
                     if (i.uniqueId == updatedListItem.uniqueId) {
-                      currentRootTemplate!
-                          .templates[currentRootTemplate!.templates.indexOf(t)]
-                          .sections[t.sections.indexOf(s)]
-                          .items[s.items.indexOf(i)] = updatedListItem;
+                      s.items[s.items.indexOf(i)] = updatedListItem;
+                      // currentRootTemplate!
+                      //     .templates[currentRootTemplate!.templates.indexOf(t)]
+                      //     .sections[t.sections.indexOf(s)]
+                      //     .items[s.items.indexOf(i)] = updatedListItem;
                       break l1;
                     }
                   }
@@ -72,9 +73,10 @@ class FlutterCarPlayController {
               for (var s in (h as CPListTemplate).sections) {
                 for (var i in s.items) {
                   if (i.uniqueId == updatedListItem.uniqueId) {
-                    currentRootTemplate!
-                        .sections[currentRootTemplate!.sections.indexOf(s)]
-                        .items[s.items.indexOf(i)] = updatedListItem;
+                    s.items[s.items.indexOf(i)] = updatedListItem;
+                    // currentRootTemplate!
+                    //     .sections[currentRootTemplate!.sections.indexOf(s)]
+                    //     .items[s.items.indexOf(i)] = updatedListItem;
                     break l1;
                   }
                 }
@@ -171,9 +173,7 @@ class FlutterCarPlayController {
             break l1;
           }
         }
-      }
-      else
-      {
+      } else {
         if (t.runtimeType.toString() == "CPInformationTemplate") {
           l2:
           for (CPTextButton b in t.actions) {
@@ -186,6 +186,4 @@ class FlutterCarPlayController {
       }
     }
   }
-  }
-
-
+}
