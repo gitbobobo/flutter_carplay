@@ -11,6 +11,12 @@ enum FCPConnectionTypes {
   static let disconnected = "DISCONNECTED"
 }
 
+enum FCPNowPlayingButtonTypes {
+  static let upNext = "UPNEXT"
+  static let albumArtist = "ALBUMARTIST"
+  static let imageButton = "IMAGEBUTTON"
+}
+
 enum FCPChannelTypes {
   static let onCarplayConnectionChange = "onCarplayConnectionChange"
   static let setRootTemplate = "setRootTemplate"
@@ -30,6 +36,8 @@ enum FCPChannelTypes {
   static let onTextButtonPressed = "onTextButtonPressed"
   static let popToRootTemplate = "popToRootTemplate"
   static let showNowPlaying = "showNowPlaying"
+  static let updateNowPlayingConfig = "updateNowPlayingConfig"
+  static let onNowPlayingButtonPressed = "onNowPlayingButtonPressed"
 }
 
 enum FCPAlertActionTypes {

@@ -9,6 +9,7 @@ import 'package:flutter_carplay/models/grid/grid_button.dart';
 import 'package:flutter_carplay/models/grid/grid_template.dart';
 import 'package:flutter_carplay/models/list/list_template.dart';
 import 'package:flutter_carplay/models/information/information_template.dart';
+import 'package:flutter_carplay/models/now_playing/now_playing_button.dart';
 import 'package:flutter_carplay/models/poi/poi.dart';
 import 'package:flutter_carplay/models/poi/poi_template.dart';
 import 'package:flutter_carplay/models/tabbar/tabbar_template.dart';
@@ -31,6 +32,8 @@ class FlutterCarPlayController {
 
   /// [CPAlertTemplate], [CPActionSheetTemplate]
   static dynamic currentPresentTemplate;
+
+  static Map<String, CPNowPlayingImageButton> nowPlayingButtons = {};
 
   MethodChannel get methodChannel {
     return _methodChannel;

@@ -6,6 +6,8 @@ import 'package:flutter_carplay/helpers/enum_utils.dart';
 import 'package:flutter_carplay/models/alert/alert_template.dart';
 import 'package:flutter_carplay/models/grid/grid_template.dart';
 import 'package:flutter_carplay/models/information/information_template.dart';
+import 'package:flutter_carplay/models/now_playing/now_playing_button.dart';
+import 'package:flutter_carplay/models/now_playing/now_playing_template.dart';
 import 'package:flutter_carplay/models/poi/poi_template.dart';
 import 'package:flutter_carplay/models/tabbar/tabbar_template.dart';
 import 'package:flutter_carplay/constants/private_constants.dart';
@@ -38,6 +40,8 @@ class FlutterCarplay {
   /// and will be transmitted to the main code, allowing the user to access
   /// the current connection status.
   Function(CPConnectionStatusTypes status)? _onCarplayConnectionChange;
+
+  Function(CPNowPlayingButtonTypes event)? onNowPlayingButtonsPressed;
 
   /// Creates an [FlutterCarplay] and starts the connection.
   FlutterCarplay() {
@@ -84,6 +88,19 @@ class FlutterCarplay {
         case FCPChannelTypes.onTextButtonPressed:
           _carPlayController
               .processFCPTextButtonPressed(event["data"]["elementId"]);
+          break;
+        case FCPChannelTypes.onNowPlayingButtonPressed:
+          final buttonType = CPEnumUtils.enumFromString(
+            CPNowPlayingButtonTypes.values,
+            event["data"]["btnType"],
+          );
+          if (buttonType == CPNowPlayingButtonTypes.imageButton) {
+            final buttonId = event["data"]["btnId"];
+            final button = FlutterCarPlayController.nowPlayingButtons[buttonId];
+            button?.onTap?.call();
+          } else {
+            onNowPlayingButtonsPressed?.call(buttonType);
+          }
           break;
         default:
           break;
@@ -272,8 +289,7 @@ class FlutterCarplay {
     if (template.runtimeType == CPGridTemplate ||
         template.runtimeType == CPListTemplate ||
         template.runtimeType == CPInformationTemplate ||
-        template.runtimeType == CPPointOfInterestTemplate
-    ) {
+        template.runtimeType == CPPointOfInterestTemplate) {
       bool isCompleted = await _carPlayController
           .reactToNativeModule(FCPChannelTypes.pushTemplate, <String, dynamic>{
         "template": template.toJson(),
@@ -288,7 +304,8 @@ class FlutterCarplay {
       throw TypeError();
     }
   }
-   /// Navigate to the shared instance of the NowPlaying Template
+
+  /// Navigate to the shared instance of the NowPlaying Template
   ///
   /// - If animated is true, CarPlay animates the transition between templates.
   static Future<bool> showSharedNowPlaying({
@@ -297,6 +314,20 @@ class FlutterCarplay {
     bool isCompleted = await _carPlayController.reactToNativeModule(
       FCPChannelTypes.showNowPlaying,
       animated,
+    );
+    return isCompleted;
+  }
+
+  static Future<bool> updateNowPlayingConfig(
+      CPNowPlayingTemplate nowPlayingTemplate) async {
+    Map<String, CPNowPlayingImageButton> buttons = {};
+    for (var button in nowPlayingTemplate.nowPlayingButtons) {
+      buttons[button.id] = button;
+    }
+    FlutterCarPlayController.nowPlayingButtons = buttons;
+    bool isCompleted = await _carPlayController.reactToNativeModule(
+      FCPChannelTypes.updateNowPlayingConfig,
+      nowPlayingTemplate.toMap(),
     );
     return isCompleted;
   }

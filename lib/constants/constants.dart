@@ -4,3 +4,9 @@ enum CPConnectionStatusTypes {
   disconnected,
   unknown,
 }
+
+enum CPNowPlayingButtonTypes {
+  upNext,
+  albumArtist,
+  imageButton,
+}

@@ -17,4 +17,6 @@ enum FCPChannelTypes {
   onTextButtonPressed,
   popToRootTemplate,
   showNowPlaying,
+  updateNowPlayingConfig,
+  onNowPlayingButtonPressed,
 }
