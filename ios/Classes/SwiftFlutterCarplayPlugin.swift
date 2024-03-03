@@ -46,7 +46,9 @@ public class SwiftFlutterCarplayPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case FCPChannelTypes.setRootTemplate:
             guard let args = call.arguments as? [String : Any] else {
-                result(false)
+                   result(FlutterError(code: "ERROR",
+                                        message: "Not found Right Args for rootTemplate.",
+                                        details: nil))
                 return
             }
             var rootTemplate: FCPRootTemplate?
@@ -78,7 +80,9 @@ public class SwiftFlutterCarplayPlugin: NSObject, FlutterPlugin {
                 SwiftFlutterCarplayPlugin.rootTemplate = (rootTemplate as! FCPListTemplate).get
                 break
             default:
-                result(false)
+                result(FlutterError(code: "ERROR",
+                                        message: "Not found RuntimeType \(args["runtimeType"] as! String) for rootTemplate.",
+                                        details: nil))
                 return
             }
             SwiftFlutterCarplayPlugin.objcRootTemplate = rootTemplate

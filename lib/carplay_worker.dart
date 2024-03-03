@@ -160,27 +160,44 @@ class FlutterCarplay {
   /// this flag when there isn’t an existing navigation hierarchy to replace.
   ///
   /// [!] CarPlay cannot have more than 5 templates on one screen.
-  static void setRootTemplate({
+  static Future<bool> setRootTemplate({
     required dynamic rootTemplate,
     bool animated = true,
-  }) {
+  }) async {
     if (rootTemplate.runtimeType == CPTabBarTemplate ||
         rootTemplate.runtimeType == CPGridTemplate ||
         rootTemplate.runtimeType == CPListTemplate ||
         rootTemplate.runtimeType == CPInformationTemplate ||
         rootTemplate.runtimeType == CPPointOfInterestTemplate) {
-      _carPlayController.methodChannel
+      final result = await _carPlayController.methodChannel
           .invokeMethod('setRootTemplate', <String, dynamic>{
         'rootTemplate': rootTemplate.toJson(),
         'animated': animated,
-        'runtimeType': "F" + rootTemplate.runtimeType.toString(),
-      }).then((value) {
-        if (value) {
-          FlutterCarPlayController.currentRootTemplate = rootTemplate;
-          _carPlayController.addTemplateToHistory(rootTemplate);
-        }
+        'runtimeType': getFlutterTemplateName(rootTemplate.runtimeType),
       });
+      if (result) {
+        FlutterCarPlayController.currentRootTemplate = rootTemplate;
+        _carPlayController.addTemplateToHistory(rootTemplate);
+      }
+      return result;
     }
+    return false;
+  }
+
+  static String getFlutterTemplateName(Type t) {
+    String typeStr = "";
+    if (t == CPTabBarTemplate) {
+      typeStr = "CPTabBarTemplate";
+    } else if (t == CPGridTemplate) {
+      typeStr = "CPGridTemplate";
+    } else if (t == CPListTemplate) {
+      typeStr = "CPListTemplate";
+    } else if (t == CPInformationTemplate) {
+      typeStr = "CPInformationTemplate";
+    } else if (t == CPPointOfInterestTemplate) {
+      typeStr = "CPPointOfInterestTemplate";
+    }
+    return 'F' + typeStr;
   }
 
   /// It will set the current root template again.
@@ -294,7 +311,7 @@ class FlutterCarplay {
           .reactToNativeModule(FCPChannelTypes.pushTemplate, <String, dynamic>{
         "template": template.toJson(),
         "animated": animated,
-        "runtimeType": "F" + template.runtimeType.toString(),
+        "runtimeType": getFlutterTemplateName(template.runtimeType),
       });
       if (isCompleted) {
         _carPlayController.addTemplateToHistory(template);
