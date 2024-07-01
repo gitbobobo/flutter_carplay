@@ -18,8 +18,9 @@ class FCPNowPlayingButton {
 
     var get: CPNowPlayingButton {
         var uiImage: UIImage?
+        var trait = FlutterCarPlaySceneDelegate.interfaceController?.carTraitCollection
         if image.starts(with: "sf_") {
-          uiImage = UIImage(systemName: image.replacingOccurrences(of: "sf_", with: ""))
+            uiImage = UIImage(systemName: image.replacingOccurrences(of: "sf_", with: ""), compatibleWith: trait)
         }else{
             uiImage = UIImage().fromFlutterAsset(name: image)
         }

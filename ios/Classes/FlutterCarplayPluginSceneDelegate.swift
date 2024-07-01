@@ -9,7 +9,7 @@ import CarPlay
 
 @available(iOS 14.0, *)
 class FlutterCarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
-    static private var interfaceController: CPInterfaceController?
+    static var interfaceController: CPInterfaceController?
     
     static private var nowPlayingObserver: CPNowPlayingTemplateObserver?
     
